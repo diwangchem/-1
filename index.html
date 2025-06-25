@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>负离子：探索健康空气的力量</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: The application is designed as a scrolling narrative to guide users on a journey of discovery. It starts by highlighting a modern problem (ion deficiency) using an impactful chart, then introduces negative ions as the natural solution. The core benefits are presented in an interactive tabbed format for easy digestion. This is followed by a visual explanation of the environmental cleaning process and a gallery of real-world applications. This thematic, story-driven structure is more engaging and persuasive for a promotional goal than a simple data dump, leading the user from problem to solution to application logically and intuitively. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Environment Ion Concentration (Table 1) -> Goal: Compare -> Viz: Interactive Bar Chart (Chart.js) -> Interaction: Hover for details -> Justification: Visually dramatizes the contrast between natural and urban environments, immediately establishing the "why."
+        - Report Info: Physiological Benefits (Table 2) -> Goal: Inform/Organize -> Viz: Tabbed Interface (HTML/CSS) -> Interaction: Click to switch between body systems -> Justification: Breaks down extensive information into user-controlled, thematic chunks, preventing overwhelm and enhancing clarity.
+        - Report Info: Air Purification Mechanism -> Goal: Explain Process -> Viz: Animated Diagram (HTML/CSS) -> Interaction: Triggers on scroll -> Justification: Simplifies a scientific concept into an easy-to-understand visual story.
+        - Report Info: Applications (Table 3) -> Goal: Organize/Inform -> Viz: Interactive Card Gallery (HTML/Grid) -> Interaction: Hover to see details -> Justification: Showcases the versatility of the technology in a modern, visually appealing format.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #F8F9FA;
+            color: #343A40;
+        }
+        .text-gradient {
+            background-image: linear-gradient(to right, #2E7D32, #4CAF50, #1B5E20);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .section-card {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .section-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .benefit-tab.active {
+            background-color: #2E7D32;
+            color: white;
+            box-shadow: 0 4px 14px 0 rgba(46, 125, 50, 0.39);
+        }
+        .benefit-tab {
+            transition: all 0.3s ease;
+        }
+        .benefit-content {
+            display: none;
+        }
+        .benefit-content.active {
+            display: block;
+        }
+        .app-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease-in-out;
+        }
+        .app-card .details {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .app-card:hover .details {
+            opacity: 1;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="sticky top-0 bg-white/80 backdrop-blur-lg z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <div class="text-2xl font-bold text-gradient">
+                活力之源
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#problem" class="text-gray-600 hover:text-green-700">现代挑战</a>
+                <a href="#benefits" class="text-gray-600 hover:text-green-700">健康益处</a>
+                <a href="#environment" class="text-gray-600 hover:text-green-700">环境净化</a>
+                <a href="#apps" class="text-gray-600 hover:text-green-700">生活应用</a>
+            </div>
+            <a href="#benefits" class="bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition duration-300">探索益处</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="text-center py-20 lg:py-32 bg-white">
+            <div class="container mx-auto px-6">
+                <h1 class="text-4xl md:text-6xl font-extrabold mb-4">呼吸<span class="text-gradient">生命力</span></h1>
+                <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+                    重新发现大自然赋予的健康秘诀——负离子。它不仅是清新的空气，更是维持我们身心活力的“空气维生素”。
+                </p>
+            </div>
+        </section>
+
+        <section id="problem" class="py-16 lg:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">我们面临的隐形“离子危机”</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">
+                        现代生活让我们远离了富含负离子的自然环境，置身于一个“离子贫瘠”的空间。这种巨大的环境差异，正悄然影响着我们的健康。下图直观地展示了不同环境中负离子浓度的惊人差距。
+                    </p>
+                </div>
+                <div class="section-card p-4 md:p-8">
+                    <div class="chart-container">
+                        <canvas id="ionConcentrationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="benefits" class="py-16 lg:py-24 bg-white">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">负离子：全面的健康守护者</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">
+                        负离子对人体的益处是系统性的，它通过作用于身体的各大系统，产生全面的积极效应。点击下方标签，探索负离子如何从内到外地优化您的健康。
+                    </p>
+                </div>
+
+                <div class="section-card p-4 sm:p-6 md:p-8">
+                    <div class="flex flex-wrap justify-center gap-2 sm:gap-4 mb-8">
+                        <button data-tab="respiratory" class="benefit-tab active text-sm sm:text-base px-4 py-2 rounded-full font-semibold">呼吸系统</button>
+                        <button data-tab="nervous" class="benefit-tab text-sm sm:text-base px-4 py-2 rounded-full font-semibold">神经系统</button>
+                        <button data-tab="cardiovascular" class="benefit-tab text-sm sm:text-base px-4 py-2 rounded-full font-semibold">心血管系统</button>
+                        <button data-tab="immune" class="benefit-tab text-sm sm:text-base px-4 py-2 rounded-full font-semibold">免疫与代谢</button>
+                    </div>
+
+                    <div id="respiratory" class="benefit-content active">
+                        <div class="grid md:grid-cols-2 gap-8 items-center">
+                            <div class="text-center md:text-left">
+                                <h3 class="text-2xl font-bold text-green-700 mb-4">让每一次呼吸更纯净</h3>
+                                <p class="text-gray-600 mb-4">负离子是呼吸道的“清道夫”。它能增强气管纤毛运动，促进异物排出，有效缓解哮喘和支气管炎症状，同时还能大幅降低呼吸道感染的风险。</p>
+                                <div class="bg-green-50 p-4 rounded-lg text-green-800 font-semibold">
+                                    <span class="text-2xl">🌬️</span> 畅通呼吸，净化气道
+                                </div>
+                            </div>
+                            <div class="p-6 bg-green-100 rounded-2xl flex items-center justify-center">
+                                 <p class="text-5xl md:text-7xl font-bold text-green-600 text-center">1/16</p>
+                                 <p class="ml-4 text-gray-700">研究发现，负离子环境可使上呼吸道感染率降至对照组的十六分之一。</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="nervous" class="benefit-content">
+                        <div class="grid md:grid-cols-2 gap-8 items-center">
+                           <div class="text-center md:text-left">
+                                <h3 class="text-2xl font-bold text-blue-700 mb-4">安抚心灵，提升专注</h3>
+                                <p class="text-gray-600 mb-4">负离子能调节大脑神经递质，降低压力水平，起到镇静、抗抑郁的作用。它能显著改善睡眠质量，是天然、无依赖性的助眠方案。</p>
+                                <div class="bg-blue-50 p-4 rounded-lg text-blue-800 font-semibold">
+                                    <span class="text-2xl">🧠</span> 舒缓压力，改善睡眠
+                                </div>
+                            </div>
+                            <div class="p-6 bg-blue-100 rounded-2xl flex items-center justify-center">
+                                 <p class="text-5xl md:text-7xl font-bold text-blue-600 text-center">+16.7%</p>
+                                 <p class="ml-4 text-gray-700">双盲试验证实，负离子可将深度睡眠时间显著提升16.7%，让您醒来时精力充沛。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="cardiovascular" class="benefit-content">
+                        <div class="grid md:grid-cols-2 gap-8 items-center">
+                             <div class="text-center md:text-left">
+                                <h3 class="text-2xl font-bold text-red-700 mb-4">净化血液，强健心脏</h3>
+                                <p class="text-gray-600 mb-4">负离子能够进入血液，降低血液粘稠度，扩张血管，从而稳定血压、改善心肌功能。它是维护心血管健康、预防动脉硬化的得力助手。</p>
+                                <div class="bg-red-50 p-4 rounded-lg text-red-800 font-semibold">
+                                    <span class="text-2xl">❤️</span> 优化循环，稳定血压
+                                </div>
+                            </div>
+                           <div class="p-6 bg-red-100 rounded-2xl flex flex-col items-center justify-center text-center">
+                                 <p class="text-4xl text-red-600">🩸</p>
+                                 <p class="mt-2 text-xl font-bold text-red-700">血液净化器</p>
+                                 <p class="mt-1 text-gray-700">使血液流动更顺畅，为全身输送更多氧气与营养。</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="immune" class="benefit-content">
+                        <div class="grid md:grid-cols-2 gap-8 items-center">
+                             <div class="text-center md:text-left">
+                                <h3 class="text-2xl font-bold text-purple-700 mb-4">激活免疫，促进代谢</h3>
+                                <p class="text-gray-600 mb-4">负离子是身体防御系统的“活化剂”。它能激活体内多种酶，增强免疫细胞功能，提高机体对疾病的抵抗力，并全面促进新陈代谢。</p>
+                                <div class="bg-purple-50 p-4 rounded-lg text-purple-800 font-semibold">
+                                    <span class="text-2xl">🛡️</span> 增强免疫，充满活力
+                                </div>
+                            </div>
+                            <div class="p-6 bg-purple-100 rounded-2xl flex flex-col items-center justify-center text-center">
+                                 <p class="text-4xl text-purple-600">⚙️</p>
+                                 <p class="mt-2 text-xl font-bold text-purple-700">细胞能量站</p>
+                                 <p class="mt-1 text-gray-700">从细胞层面激发活力，促进机体健康成长与修复。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="environment" class="py-16 lg:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">主动式环境净化专家</h2>
+                    <p class="text-gray-600 max-w-3xl mx-auto">
+                        负离子技术不仅有益于人体，更能主动净化我们身边的环境。它像无数个微型吸尘器，主动出击，捕捉并清除空气中的污染物，创造一个真正洁净安全的空间。
+                    </p>
+                </div>
+                <div class="grid md:grid-cols-3 gap-8 text-center">
+                    <div class="section-card p-8">
+                        <div class="text-4xl mb-4">☁️</div>
+                        <h3 class="text-xl font-b
